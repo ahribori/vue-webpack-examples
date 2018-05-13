@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import About from "./views/About.vue";
 import Counter from "./views/Counter.vue";
+import Coin from "./views/Coin.vue";
 
 Vue.use(Router);
 
@@ -21,7 +22,12 @@ export default new Router({
     {
       path: "/counter",
       name: "counter",
-      component: Counter,
+      component: Counter
+    },
+    {
+      path: "/coin",
+      name: "coin",
+      component: Coin
     }
   ]
 });

@@ -8,25 +8,24 @@
 </template>
 
 <script>
-  import store from '../store';
+import store from "../store";
 
-  export default {
-    name: "Counter",
-    computed: {
-      count: () => store.state.count
-
+export default {
+  name: "Counter",
+  computed: {
+    count: () => store.state.count
+  },
+  methods: {
+    onIncreaseButtonClicked: () => {
+      store.commit("increment", {
+        amount: 1
+      });
     },
-    methods: {
-      onIncreaseButtonClicked: () => {
-        store.commit('increment', {
-          amount: 1
-        });
-      },
-      onIncreaseActionButtonClicked: () => {
-        store.dispatch('incrementAction', {
-          amount: 1
-        });
-      }
+    onIncreaseActionButtonClicked: () => {
+      store.dispatch("incrementAction", {
+        amount: 1
+      });
     }
   }
+};
 </script>
