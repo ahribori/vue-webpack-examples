@@ -126,6 +126,9 @@
         return coinName.replace('CRIX.UPBIT.', '');
       },
       comma(x) {
+        if (!x) {
+          return null;
+        }
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       },
       connect() {
