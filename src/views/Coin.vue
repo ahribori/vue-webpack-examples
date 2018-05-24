@@ -1,38 +1,18 @@
 <template>
   <div class="coins">
-    <h1>Coin</h1>
-    <table>
-      <thead>
-      <tr>
-        <th>코인명</th>
-        <th>현재가</th>
-        <th>등락</th>
-        <th>등락율</th>
-        <th>시가</th>
-        <th>고점</th>
-        <th>저점</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(value, key) in coins" :key="key"
-          :class="{
-          rise: value.tradePrice - value.prevTradePrice > 0,
-          fall: value.tradePrice - value.prevTradePrice < 0 }">
-        <td>{{filterCoinName(key)}}</td>
-        <td :class="{'rise-font': value.change === 'RISE', 'fall-font': value.change === 'FALL',}">{{comma(value.tradePrice)}} 원</td>
-        <td :class="{'rise-font': value.change === 'RISE', 'fall-font': value.change === 'FALL',}">{{changeDirection(value.change)}} {{comma(value.changePrice)}} 원</td>
-        <td :class="{'rise-font': value.change === 'RISE', 'fall-font': value.change === 'FALL',}">{{Number(value.changeRate * 100).toFixed(2)}}%</td>
-        <td>{{comma(value.openingPrice)}} 원</td>
-        <td>{{comma(value.highPrice)}} 원</td>
-        <td>{{comma(value.lowPrice)}} 원</td>
-      </tr>
-      </tbody>
-    </table>
+    <v-container grid-list-md text-xs-center>
+      <v-layout row wrap>
+        <v-flex v-for="(value, key) in coins" :key="key" xs12 sm6 md4 lg3 xl2>
+          <CoinCard :data="value"></CoinCard>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
 <script>
   import store from "../store";
+  import CoinCard from '../components/CoinCard';
 
   export default {
     name: "Coin",
@@ -110,27 +90,6 @@
       }
     },
     methods: {
-      changeDirection(change) {
-        switch (change) {
-          case "RISE": {
-            return "↑";
-          }
-          case "FALL": {
-            return "↓";
-          }
-          default:
-            return null;
-        }
-      },
-      filterCoinName(coinName) {
-        return coinName.replace('CRIX.UPBIT.', '');
-      },
-      comma(x) {
-        if (!x) {
-          return null;
-        }
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      },
       connect() {
         this.sock = new WebSocket(
             "wss://crix-websocket.upbit.com/sockjs/376/55bjewyr/websocket"
@@ -240,57 +199,13 @@
     destroyed() {
       this.isConnected = false;
       this.disconnect();
+    },
+    components: {
+      CoinCard,
     }
   };
 </script>
 
 <style scoped>
-  table {
-    text-align: left;
-    width: 100%;
-  }
 
-  .coins .coin {
-    text-align: left;
-  }
-
-  .rise {
-    animation: rise 0.5s;
-  }
-
-  .fall {
-    animation: fall 0.5s;
-  }
-
-  .rise-font {
-    color: red;
-  }
-
-  .fall-font {
-    color: blue;
-  }
-
-  @keyframes rise {
-    0% {
-      bacground-color: rgba(0, 0, 255, 0);
-    }
-    50% {
-      background-color: rgba(0, 0, 255, 0.1);
-    }
-    100% {
-      bacground-color: rgba(0, 0, 255, 0);
-    }
-  }
-
-  @keyframes fall {
-    0% {
-      bacground-color: rgba(255, 0, 0, 0);
-    }
-    50% {
-      background-color: rgba(255, 0, 0, 0.1);
-    }
-    100% {
-      bacground-color: rgba(255, 0, 0, 0);
-    }
-  }
 </style>
