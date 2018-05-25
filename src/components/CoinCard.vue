@@ -3,6 +3,14 @@
     <v-card>
       <v-card-title primary-title>
         <h3 class="headline mb-0">{{filterCoinName(data.code)}}</h3>
+        <Candle
+                class="align-end"
+                :highPrice="data.highPrice"
+                :lowPrice="data.lowPrice"
+                :openingPrice="data.openingPrice"
+                :currentPrice="data.tradePrice"
+                :direction="data.change"
+        ></Candle>
       </v-card-title>
       <v-divider></v-divider>
       <v-list dense>
@@ -35,6 +43,8 @@
 </template>
 
 <script>
+  import Candle from './Candle';
+
   export default {
     name: "CoinCard",
     props: {
@@ -65,6 +75,9 @@
             return null;
         }
       },
+    },
+    components: {
+      Candle,
     }
   }
 </script>
