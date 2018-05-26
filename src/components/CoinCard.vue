@@ -22,11 +22,11 @@
         >
           <v-list-tile-content><h3>{{comma(data.tradePrice)}} 원</h3></v-list-tile-content>
           <v-list-tile-content class="align-end">{{changeDirection(data.change)}}{{comma(data.changePrice)}}원
-            ({{Number(data.changeRate * 100).toFixed(2)}}%)
+            ({{data.change === 'RISE' ? '+' : '-'}}{{Number(data.changeRate * 100).toFixed(2)}}%)
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile>
-          <v-list-tile-content>시작가</v-list-tile-content>
+          <v-list-tile-content>시가</v-list-tile-content>
           <v-list-tile-content class="align-end">{{comma(data.openingPrice)}} 원</v-list-tile-content>
         </v-list-tile>
         <v-list-tile>
@@ -36,6 +36,11 @@
         <v-list-tile>
           <v-list-tile-content>저가</v-list-tile-content>
           <v-list-tile-content class="align-end">{{comma(data.lowPrice)}} 원</v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-content>거래대금</v-list-tile-content>
+          <v-list-tile-content class="align-end">{{accTradePrice24h}} 백만원
+          </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-card>
@@ -49,6 +54,12 @@
     name: "CoinCard",
     props: {
       data: Object,
+    },
+    computed: {
+      accTradePrice24h: function() {
+        const value = this.data.accTradePrice24h;
+        return this.comma((value / 1000000).toFixed(0))
+      }
     },
     methods: {
       filterCoinName(coinName) {
