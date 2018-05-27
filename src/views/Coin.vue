@@ -1,6 +1,6 @@
 <template>
   <div class="coins">
-    <v-container grid-list-md text-xs-center>
+    <v-container grid-list-md text-xs-center v-if="!pending">
       <v-layout row wrap>
         <v-flex v-for="(value, key) in coins" :key="key" xs12 sm6 md4 lg3 xl2>
           <CoinCard :data="value"></CoinCard>
@@ -18,6 +18,7 @@
     name: "Coin",
     data() {
       return {
+        pending: true,
         codes: [
           "CRIX.UPBIT.KRW-BTC",
           "CRIX.UPBIT.KRW-DASH",
@@ -175,6 +176,9 @@
           } else {
             if (event.data.startsWith("a")) {
               try {
+                if (this.pending) {
+                  this.pending = false;
+                }
                 const api = JSON.parse(
                     JSON.parse(event.data.slice(1, event.data.length))[0]
                 );
