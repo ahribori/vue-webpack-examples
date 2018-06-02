@@ -1,6 +1,7 @@
 <template>
   <div class="coins">
     <v-container grid-list-md text-xs-center v-if="!pending">
+      <Chart coinType="hello"/>
       <v-layout row wrap>
         <v-flex v-for="(value, key) in coins" :key="key" xs12 sm6 md4 lg3 xl2>
           <CoinCard :data="value"></CoinCard>
@@ -13,6 +14,7 @@
 <script>
   import store from "../store";
   import CoinCard from '../components/CoinCard';
+  import Chart from '../components/Chart';
 
   export default {
     name: "Coin",
@@ -206,6 +208,7 @@
     },
     components: {
       CoinCard,
+      Chart
     }
   };
 </script>
