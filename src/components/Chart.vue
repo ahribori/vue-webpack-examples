@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import Highcharts from 'highcharts/highstock';
   import mockData from './mockData.json';
 
@@ -13,33 +14,54 @@
     props: {
       coinType: String,
     },
-    mounted: function() {
-      Highcharts.stockChart('container', {
-        rangeSelector: {
-          selected: 1
-        },
+    methods: {
+      initializeChart: function (data) {
+        this.chart = Highcharts.stockChart('container', {
+          rangeSelector: {
+            selected: 1
+          },
 
-        title: {
-          text: 'AAPL Stock Price'
-        },
+          title: {
+            text: 'AAPL Stock Price'
+          },
 
-        series: [{
-          type: 'candlestick',
-          name: 'AAPL Stock Price',
-          data: mockData.data,
-          dataGrouping: {
-            units: [
-              [
-                'week', // unit name
-                [1] // allowed multiples
-              ], [
-                'month',
-                [1, 2, 3, 4, 6]
+          series: [{
+            type: 'candlestick',
+            name: 'AAPL Stock Price',
+            data: data,
+          }]
+        })
+      },
+      clearChart: function () {
+        if (this.chart) {
+          this.chart.destroy();
+        }
+      },
+      fetchData: function(coinType) {
+        if (coinType) {
+          return axios.get(`https://crix-api-endpoint.upbit.com/v1/crix/candles/days?code=CRIX.UPBIT.KRW-BTC&count=90`)
+        }
+      }
+    },
+    mounted: function () {
+      this.fetchData(this.coinType)
+          .then((result) => {
+            const chartData = result.data.map(data => {
+              return [
+                  data.timestamp,
+                  data.openingPrice,
+                  data.highPrice,
+                  data.lowPrice,
+                  data.tradePrice
               ]
-            ]
-          }
-        }]
-      })
+            })
+            this.initializeChart(chartData.reverse());
+          })
+
+    },
+    beforeDestroy: function () {
+      this.clearChart();
+
     }
   }
 </script>
