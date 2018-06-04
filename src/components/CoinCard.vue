@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card>
+    <v-card :class="{ 'selected': selected }">
       <v-card-title primary-title>
         <h3 class="headline mb-0">{{filterCoinName(data.code)}}</h3>
         <Candle
@@ -54,6 +54,7 @@
     name: "CoinCard",
     props: {
       data: Object,
+      selected: Boolean,
     },
     computed: {
       accTradePrice24h: function() {
@@ -94,6 +95,11 @@
 </script>
 
 <style scoped>
+  .selected {
+    box-sizing: border-box;
+    border: 1px dashed gray;
+  }
+
   .rise {
     animation: rise 1s;
   }
